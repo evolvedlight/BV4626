@@ -8,27 +8,32 @@
 # Version 1 27 Feb 2013
 #
 import serial
+import logging
 from time import sleep
 CR = '\015'
 ESC = '\033'
 
+logging.basicConfig()
+log = logging.getLogger(__name__)
+
 # ------------------------------------------------------------------------------
 # returns the comport connector for use with class
 # ------------------------------------------------------------------------------
-def Connect(port,baud):
+def connect(port,baud):
     return serial.Serial(port, baud, timeout=.5, stopbits=1, parity='N' )
 
-class bv4626:
+class BV4626(object):
     """BV4626 Multi I/O"""
     sp = None   # sp is set to communication device by Init()
-    def __init__(self,com,ack='\006'):
+    def __init__(self,com,ack='\006',do_connect=True):
         self.sp = com # communication instance
         self.ack = ack 
-
+        if do_connect:
+            self.connect()
     # --------------------------------------------------------------------------
     # Initialise device, sets the Baud rate and ACK char
     # --------------------------------------------------------------------------
-    def Init(self):
+    def connect(self):
         j = 10
         k = ''
         self.sp.write(CR) # establish Baud rate
@@ -42,8 +47,8 @@ class bv4626:
         self.sp.write("Clearing buffer\r") # clears buffer
         self.sp.write("\r")
         self.sp.write(ESC+'['+str(ord(self.ack))+'E') # set ACK
-        print 'DEBUG',j 
-
+        log.debug(j)
+        
     # --------------------------------------------------------------------------
     # sends command, starts with ESC and waits for ACK
     # --------------------------------------------------------------------------
@@ -65,7 +70,7 @@ class bv4626:
             if j <= 0: break
         # DEBUG
         if j < 5: 
-            print "Possible command problem"
+            log.error("Possible command problem")
              
     # --------------------------------------------------------------------------
     # reads characters up to ACK and returns them
