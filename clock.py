@@ -23,13 +23,13 @@ def main():
         sp = BV4626.connect(sys.argv[1],115200)
         cl = BV4626.BV4626(sp)
         print "Device id {}".format(cl.ID())
-        print "Firmware {}".format(cl.Firmware())
+        print "Firmware {}".format(cl.firmware())
         print "Clicking relays"
         for n in range(0,60):
             print n
-            cl.RelayA(1)
+            cl.relayA(1)
             sleep(1)
-            cl.RelayA(0)
+            cl.relayA(0)
             sleep(1)
 
 if __name__ == "__main__":

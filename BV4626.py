@@ -52,16 +52,16 @@ class BV4626(object):
     # --------------------------------------------------------------------------
     # sends command, starts with ESC and waits for ACK
     # --------------------------------------------------------------------------
-    def Csi(self,str):
+    def csi(self,str):
         self.sp.flushInput()
         self.sp.write(ESC+str)
-        self.Wack()
+        self.wack()
 
     # --------------------------------------------------------------------------
     # for commands that just return ACK,
     # Does not return anything but will wait for the ACK char
     # --------------------------------------------------------------------------
-    def Wack(self):
+    def wack(self):
         k = 0
         j = 10 # time out after this
         while k != self.ack:
@@ -76,7 +76,7 @@ class BV4626(object):
     # reads characters up to ACK and returns them
     # note will return a string
     # --------------------------------------------------------------------------
-    def CsiRead(self,str):
+    def csiRead(self,str):
         k = ''
         v = ''
         self.sp.flushInput()
@@ -97,13 +97,13 @@ class BV4626(object):
     # device id
     # ------------------------------------------------------------------------------
     def ID(self):
-        return self.CsiRead('[?31d')
+        return self.csiRead('[?31d')
 
     # ------------------------------------------------------------------------------
     # firmware version
     # ------------------------------------------------------------------------------
-    def Firmware(self):
-        return self.CsiRead('[?31f')
+    def firmware(self):
+        return self.csiRead('[?31f')
     
     # ******************************************************************************
     # RELAYS
@@ -111,17 +111,17 @@ class BV4626(object):
     # ------------------------------------------------------------------------------
     # truns realy on or off action = 0 for off
     # ------------------------------------------------------------------------------
-    def RelayA(self,action):
+    def relayA(self,action):
         if action == 0:
-            self.Csi('[0A')
+            self.csi('[0A')
         else:
-            self.Csi('[1A')
+            self.csi('[1A')
     
-    def RelayB(self,action):
+    def relayB(self,action):
         if action == 0:
-            self.Csi('[0B')
+            self.csi('[0B')
         else:
-            self.Csi('[1B')
+            self.csi('[1B')
     
     # ******************************************************************************
     # digital I/O
@@ -133,13 +133,13 @@ class BV4626(object):
     # in decimal, thus: Ioset(15). or Ioset(0x0f) 
     # ------------------------------------------------------------------------------
     def Ioset(self,action):
-        self.Csi('['+str(action)+'s')
+        self.csi('['+str(action)+'s')
     
     # ------------------------------------------------------------------------------
     # return port value
     # ------------------------------------------------------------------------------
     def Ioval(self):
-        return self.CsiRead('[r')
+        return self.csiRead('[r')
     
     # ------------------------------------------------------------------------------
     # sets a PWM value for a given channel
@@ -147,7 +147,7 @@ class BV4626(object):
     # value should also be an integer '0' to '255'
     # ------------------------------------------------------------------------------
     def Ioout(self,chan,val):
-        self.Csi('['+str(val)+chan)
+        self.csi('['+str(val)+chan)
         
     # ******************************************************************************
     # ADC, Analogue to Digital
@@ -157,7 +157,7 @@ class BV4626(object):
     # Range 0 to 3
     # ------------------------------------------------------------------------------
     def Adcin(self,chan):
-        return self.CsiRead('['+str(chan)+'D')
+        return self.csiRead('['+str(chan)+'D')
 
     # ------------------------------------------------------------------------------
     # Sets voltage refrence
@@ -167,7 +167,7 @@ class BV4626(object):
     # 3 = 4.096V
     # ------------------------------------------------------------------------------
     def Adcvoltage(self,value):
-        self.Csi('['+str(value)+'V')
+        self.csi('['+str(value)+'V')
         
     # ******************************************************************************
     # DAC, Digital to Analogue
@@ -178,7 +178,7 @@ class BV4626(object):
     # value = 0 to 63
     # ------------------------------------------------------------------------------
     def DacX(self,value):
-        self.Csi('['+str(value)+'X')
+        self.csi('['+str(value)+'X')
            
     # ------------------------------------------------------------------------------
     # outputs a value to a channel Y
@@ -186,6 +186,6 @@ class BV4626(object):
     # value = 0 to 63
     # ------------------------------------------------------------------------------
     def DacY(self,value):
-        self.Csi('['+str(value)+'Y')
+        self.csi('['+str(value)+'Y')
 
 
