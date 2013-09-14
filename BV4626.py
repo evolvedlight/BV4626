@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 # returns the comport connector for use with class
 # ------------------------------------------------------------------------------
 def connect(port,baud):
-    return serial.Serial(port, baud, timeout=.5, stopbits=1, parity='N' )
+    return serial.Serial(port, baud, timeout=.5, rtscts=1, stopbits=1, parity='N' )
 
 class BV4626(object):
     """BV4626 Multi I/O"""
